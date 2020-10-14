@@ -41,7 +41,7 @@ def MERGE_IMAGE(num,left_i,right_i,save_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--path")
-    parser.add_argument("--merge_image",default="False")
+    parser.add_argument("--merge_image",default="True")
     args = parser.parse_args()
     for num_files in LISTDIR(args.path):
         full_path = os.path.join(args.path,num_files)

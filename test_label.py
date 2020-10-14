@@ -6,7 +6,6 @@ import logging
 from tqdm import tqdm
 import argparse
 import ipdb
-check_ll = [-2,-1,0,1,2]
 def get_color(frame):
     hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
     color_dict = colorList.getColorList()
@@ -22,11 +21,11 @@ def get_color(frame):
                 for j in range(yellow_mask.shape[1]):
                     if yellow_mask[i][j] == 255:
                         check_num = 0
-                        for x in check_ll:
-                            for y in check_ll:
+                        for x in [-2,2]:
+                            for y in [-2,2]:
                                 if yellow_mask[i+x][j+y] == 255:
                                     check_num +=1
-                        if check_num >=10:        
+                        if check_num >=2:        
                             yellow_point_num +=1
                             yellow_point_list.append([j,i])
                         else:
@@ -38,11 +37,11 @@ def get_color(frame):
                 for j in range(green_mask.shape[1]):
                     if green_mask[i][j] == 255:
                         check_num = 0
-                        for x in check_ll:
-                            for y in check_ll:
+                        for x in [-2,2]:
+                            for y in [-2,2]:
                                 if green_mask[i+x][j+y] == 255:
                                     check_num +=1
-                        if check_num >=10:
+                        if check_num >=2:
                             green_point_num +=1
                             green_point_list.append([j,i])
                         else:
@@ -66,8 +65,8 @@ def CHECK_DSSTORE(path):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_path")
-    parser.add_argument("--output_path")
+    parser.add_argument("--input_path", default = "./test_label")
+    parser.add_argument("--output_path", default = "./test_p20")
     args = parser.parse_args()
     for num_files in LISTDIR(args.input_path):
         full_path = os.path.join(args.input_path,num_files)
@@ -102,4 +101,5 @@ if __name__ == '__main__':
                                     cv2.imwrite(img_out_file_path,gs_img)
                                 else:
                                     cv2.imwrite(img_out_file_path,gs_img)
+
                         
