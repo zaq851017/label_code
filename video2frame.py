@@ -13,6 +13,9 @@ if __name__ == "__main__":
     count = 0
     success = True
     while success:
+        #ipdb.set_trace()
+        image = cv2.resize(image, (720, 540), cv2.INTER_CUBIC)
+        #ipdb.set_trace()
         if count<10:
             cv2.imwrite("temp_out/frame00%d.jpg" % count, image) 
         elif count < 100 and count > 9:
