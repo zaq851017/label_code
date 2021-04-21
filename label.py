@@ -21,6 +21,7 @@ def get_color(frame):
             for i in range(yellow_mask.shape[0]):
                 for j in range(yellow_mask.shape[1]):
                     if yellow_mask[i][j] == 255:
+                        
                         check_num = 0
                         for x in check_ll:
                             for y in check_ll:
@@ -31,12 +32,15 @@ def get_color(frame):
                             yellow_point_list.append([j,i])
                         else:
                             yellow_mask[i][j] = 0
+                        #yellow_point_list.append([j,i])
+                        #yellow_point_num +=1
         if color_which == 1:
             green_mask = cv2.inRange(hsv,color_dict[d][0],color_dict[d][1])
             cv2.imwrite('green.jpg',green_mask)
             for i in range(green_mask.shape[0]):
                 for j in range(green_mask.shape[1]):
                     if green_mask[i][j] == 255:
+                        
                         check_num = 0
                         for x in check_ll:
                             for y in check_ll:
@@ -47,6 +51,9 @@ def get_color(frame):
                             green_point_list.append([j,i])
                         else:
                             green_mask[i][j] = 0
+                        
+                        #green_point_list.append([j,i])
+                        #green_point_num += 1
     if yellow_point_num >= green_point_num:
         return yellow_mask,np.array(yellow_point_list)
     else:
@@ -62,6 +69,14 @@ def CHECK_DSSTORE(path):
         return True
     else:
         return False
+
+def hisEqulColor(img):
+    ycrcb = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
+    channels = cv2.split(ycrcb)
+    cv2.equalizeHist(channels[0], channels[0])
+    cv2.merge(channels, ycrcb)
+    cv2.cvtColor(ycrcb, cv2.COLOR_YCR_CB2BGR, img)
+    return img
         
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
@@ -83,13 +98,16 @@ if __name__ == '__main__':
                         os.makedirs(out_file_path_1+"/mask")
                     out_file_path_2 = out_file_path_1
                     out_file_path_1 = out_file_path_1 + "/mask"
+                    print(full_path_2) 
                     for frame_files in (LISTDIR(full_path_2)):
                         if frame_files == 'original':
-                            print("cp -r "+os.path.join(full_path_2,frame_files)+" "+out_file_path_2)
                             os.system("cp -r "+os.path.join(full_path_2,frame_files)+" " +out_file_path_2)
-                        elif frame_files == 'label':
+                            os.system("ls -l "+os.path.join(full_path_2,frame_files)+ " |grep \"^-\"|wc -l")
+                        elif frame_files == 'repolygon':
+                            frame_file_num = 0
                             tmp_path = os.path.join(full_path_2,frame_files)
                             for real_frame_files in tqdm(LISTDIR(tmp_path)):
+                                frame_file_num += 1
                                 if CHECK_DSSTORE(real_frame_files):
                                     continue
                                 full_path_3 = os.path.join(tmp_path,real_frame_files)
@@ -102,4 +120,4 @@ if __name__ == '__main__':
                                     cv2.imwrite(img_out_file_path,gs_img)
                                 else:
                                     cv2.imwrite(img_out_file_path,gs_img)
-                        
+                    print("frame num ",str(frame_file_num))                       

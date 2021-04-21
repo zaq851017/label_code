@@ -85,10 +85,10 @@ def vol_cal(frame_file_path):
             save_path = os.path.join(full_path_2, "Volume.jpg")
             plt.savefig(save_path)
             plt.close()
-    for dir_files in (LISTDIR("./specific_label/")):
-        full_path = os.path.join("./specific_label/", dir_files)
+    for dir_files in (LISTDIR(frame_file_path)):
+        full_path = os.path.join(frame_file_path, dir_files)
         for num_files in tqdm(LISTDIR(full_path)):
             full_path_2 = os.path.join(full_path, num_files+"/merge")
             frame2video(full_path_2)
 if __name__ == "__main__":
-    vol_result = vol_cal("./specific_label/")
+    vol_result = vol_cal("./specific_correct_label_result/")
