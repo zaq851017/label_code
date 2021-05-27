@@ -30,9 +30,9 @@ if __name__ == "__main__":
                 mask_files = os.path.join(mask_path, files.split(".")[0]+"_out.jpg")
                 origin_img = cv2.imread(origin_files)
                 mask_img = cv2.imread(mask_files) / 255
-                heatmap = np.uint8(255 * mask_img)
-                heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-                heat_img = heatmap*0.9+origin_img
+                heatmap = np.uint8(110 * mask_img)
+                heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_HOT)
+                heat_img = heatmap*0.6+origin_img
                 merge_img = np.hstack([origin_img, heat_img])
                 cv2.imwrite(os.path.join(merge_path, files), merge_img)
                 cv2.imwrite(os.path.join(heat_path, files), heat_img)
