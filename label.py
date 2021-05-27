@@ -100,10 +100,10 @@ if __name__ == '__main__':
                     out_file_path_1 = out_file_path_1 + "/mask"
                     print(full_path_2) 
                     for frame_files in (LISTDIR(full_path_2)):
-                        if frame_files == 'original':
-                            os.system("cp -r "+os.path.join(full_path_2,frame_files)+" " +out_file_path_2)
-                            os.system("ls -l "+os.path.join(full_path_2,frame_files)+ " |grep \"^-\"|wc -l")
-                        elif frame_files == 'repolygon':
+                        # if frame_files == 'original':
+                        #     os.system("cp -r "+os.path.join(full_path_2,frame_files)+" " +out_file_path_2)
+                        #     os.system("ls -l "+os.path.join(full_path_2,frame_files)+ " |grep \"^-\"|wc -l")
+                        if frame_files == 'forfilm':
                             frame_file_num = 0
                             tmp_path = os.path.join(full_path_2,frame_files)
                             for real_frame_files in tqdm(LISTDIR(tmp_path)):
@@ -112,12 +112,16 @@ if __name__ == '__main__':
                                     continue
                                 full_path_3 = os.path.join(tmp_path,real_frame_files)
                                 img_out_file_path = os.path.join(out_file_path_1,real_frame_files[:-4])
-                                img_out_file_path = img_out_file_path + "_out.jpg"
                                 frame = cv2.imread(full_path_3)
                                 gs_img,point_list = get_color(frame)
                                 if point_list.size != 0:
+                                    w_origin_img_path = img_out_file_path.replace('mask', 'original')
+                                    w_origin_img_path = w_origin_img_path+".jpg"
+                                    r_origin_img_path = w_origin_img_path.replace(args.output_path, args.input_path)
+                                    img_out_file_path = img_out_file_path + "_out.jpg"
                                     cv2.fillPoly(gs_img,[point_list],255) 
                                     cv2.imwrite(img_out_file_path,gs_img)
-                                else:
-                                    cv2.imwrite(img_out_file_path,gs_img)
+                                    os.system("cp "+r_origin_img_path+" "+w_origin_img_path)
+                                # else:
+                                #     cv2.imwrite(img_out_file_path,gs_img)
                     print("frame num ",str(frame_file_num))                       
